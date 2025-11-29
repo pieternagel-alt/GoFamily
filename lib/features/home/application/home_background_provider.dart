@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Merker, ob der Kids-Mode aktiv ist.
-/// (Später kannst du das mit deinem echten Kids-State verbinden.)
+/// Einfacher Toggle für Kids-Mode (wird später durch echten Kids-State ersetzt)
 final kidsModeProvider = StateProvider<bool>((ref) => false);
 
-/// Liefert den Pfad zum passenden Hintergrundbild
-/// abhängig von:
-///  - Kids-Mode
-///  - System-Helligkeit (Hell/Dunkel)
+/// Liefert den passenden Hintergrund (Kids / Light / Dark)
 final homeBackgroundProvider = Provider<String>((ref) {
   final isKids = ref.watch(kidsModeProvider);
   final brightness =

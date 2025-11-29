@@ -1,32 +1,26 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/app_state/app_settings.dart';
 import '../../core/app_state/app_settings_controller.dart';
 
-part 'settings_controller.g.dart';
+class SettingsController {
+  SettingsController(this.ref);
 
-@riverpod
-class SettingsController extends _$SettingsController {
-  @override
-  void build() {
-    // v0.8: keine eigene Initialisierungslogik nötig.
+  final WidgetRef ref;
+
+  AppSettings get settings => ref.watch(appSettingsControllerProvider);
+
+  void toggleDarkMode(bool value) {
+    ref.read(appSettingsControllerProvider.notifier).toggleDarkMode(value);
   }
 
-  Future<void> toggleDarkMode() async {
-    final appSettingsCtrl = ref.read(appSettingsControllerProvider.notifier);
-    await appSettingsCtrl.toggleDarkMode();
+  void setTextScaleFactor(double factor) {
+    ref.read(appSettingsControllerProvider.notifier).setTextScaleFactor(factor);
   }
 
-  Future<void> setTextScale(double factor) async {
-    final appSettingsCtrl = ref.read(appSettingsControllerProvider.notifier);
-    await appSettingsCtrl.setTextScaleFactor(factor);
-  }
-
-  Future<void> setHomeModuleVisibility(
-    HomeModule module,
-    bool isVisible,
-  ) async {
-    final appSettingsCtrl = ref.read(appSettingsControllerProvider.notifier);
-    await appSettingsCtrl.setHomeModuleVisibility(module, isVisible);
+  void setHomeModuleVisibility(HomeModule module, bool visible) {
+    ref
+        .read(appSettingsControllerProvider.notifier)
+        .setHomeModuleVisibility(module, visible);
   }
 }

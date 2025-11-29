@@ -1,11 +1,8 @@
-/// Platzhalter-Service für AR-Funktionen.
-/// Aktuell nur eine Dummy-Implementierung,
-/// damit `ar_controller.dart` ohne Fehler kompiliert.
+/// Sehr einfacher AR-Service für v0.9
 class ArService {
-  /// Später kannst du hier z.B. ARCore / ARKit abfragen.
-  /// Für jetzt: einfache Dummy-Rückgabe.
-  Future<bool> isSupported() async {
-    // TODO: echte AR-Unterstützung prüfen
-    return false;
-  }
+  const ArService();
+
+  /// Später: echte Gerätekontrolle, ob AR unterstützt wird.
+  /// Jetzt: immer true, damit das UI weiterkommt.
+  bool get isSupported => true;
 }
