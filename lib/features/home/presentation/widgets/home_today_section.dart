@@ -23,17 +23,30 @@ class HomeTodaySection extends ConsumerWidget {
               if (citySnap.hasData && citySnap.data != null) {
                 city = citySnap.data!;
               }
-              return _buildContent(city);
+              return _content(city);
             },
           );
         }
 
-        return _buildContent(city);
+        return _content(city);
       },
     );
   }
 
-  Widget _buildContent(String city) {
+  Widget _content(String city) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _title(city),
+        const SizedBox(height: 24),
+        _cards(),
+        const SizedBox(height: 24),
+        const _RecommendationCard(),
+      ],
+    );
+  }
+
+  Widget _title(String city) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,34 +55,29 @@ class HomeTodaySection extends ConsumerWidget {
           style: const TextStyle(color: Colors.white, fontSize: 26),
         ),
         const SizedBox(height: 4),
-        Text(
-          "in $city",
-          style: const TextStyle(color: Colors.white70, fontSize: 16),
-        ),
-        const SizedBox(height: 22),
+        Text("in $city", style: const TextStyle(color: Colors.white70)),
+      ],
+    );
+  }
 
-        Row(
-          children: const [
-            Expanded(
-              child: _MiniCard(
-                icon: Icons.directions_walk_rounded,
-                title: "Schritte",
-                value: "2413",
-              ),
-            ),
-            SizedBox(width: 14),
-            Expanded(
-              child: _MiniCard(
-                icon: Icons.local_florist_rounded,
-                title: "Waldzeit",
-                value: "34 min",
-              ),
-            ),
-          ],
+  Widget _cards() {
+    return Row(
+      children: const [
+        Expanded(
+          child: _MiniCard(
+            icon: Icons.directions_walk_rounded,
+            title: "Schritte",
+            value: "2413",
+          ),
         ),
-
-        const SizedBox(height: 22),
-        const _RecommendationCard(),
+        SizedBox(width: 12),
+        Expanded(
+          child: _MiniCard(
+            icon: Icons.local_florist_rounded,
+            title: "Waldzeit",
+            value: "34 min",
+          ),
+        ),
       ],
     );
   }
@@ -100,7 +108,7 @@ class _MiniCard extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.15),
             borderRadius: BorderRadius.circular(18),
@@ -110,10 +118,7 @@ class _MiniCard extends StatelessWidget {
             children: [
               Icon(icon, color: Colors.white),
               const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
-              ),
+              Text(title, style: const TextStyle(color: Colors.white70)),
               Text(
                 value,
                 style: const TextStyle(color: Colors.white, fontSize: 22),

@@ -1,18 +1,11 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'ar_service.g.dart';
-
+/// Platzhalter-Service für AR-Funktionen.
+/// Aktuell nur eine Dummy-Implementierung,
+/// damit `ar_controller.dart` ohne Fehler kompiliert.
 class ArService {
-  const ArService();
-
-  /// v0.9: Dummy-Implementierung – liefert nur "AR wird unterstützt" zurück.
+  /// Später kannst du hier z.B. ARCore / ARKit abfragen.
+  /// Für jetzt: einfache Dummy-Rückgabe.
   Future<bool> isSupported() async {
-    await Future.delayed(const Duration(milliseconds: 120));
-    return true;
+    // TODO: echte AR-Unterstützung prüfen
+    return false;
   }
-}
-
-@riverpod
-ArService arService(Ref ref) {
-  return const ArService();
 }

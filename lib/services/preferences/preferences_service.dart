@@ -1,55 +1,50 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:gofamily/core/app_state/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/app_state/app_settings.dart';
-
-part 'preferences_service.g.dart';
-
+/// Kapselt Zugriff auf SharedPreferences
+/// zum Laden/Speichern der AppSettings.
 class PreferencesService {
-  PreferencesService(this.prefs);
+  static const _keyDarkMode = 'darkMode';
+  static const _keyTextScale = 'textScale';
+  static const _keyHomeModules = 'homeModules';
 
-  final SharedPreferences prefs;
+  Future<AppSettings> loadAppSettings() async {
+    final prefs = await SharedPreferences.getInstance();
 
-  static const _keyDarkMode = 'app_dark_mode';
-  static const _keyTextScale = 'app_text_scale';
-  static const _keyHomeShowWeather = 'home_show_weather';
-  static const _keyHomeShowSafety = 'home_show_safety';
-  static const _keyHomeShowActivities = 'home_show_activities';
-
-  AppSettings loadAppSettings() {
     final isDarkMode = prefs.getBool(_keyDarkMode) ?? false;
-    final textScaleFactor = prefs.getDouble(_keyTextScale) ?? 1.0;
+    final textScale = prefs.getDouble(_keyTextScale) ?? 1.0;
+    final modulesString = prefs.getStringList(_keyHomeModules);
 
-    final showWeather = prefs.getBool(_keyHomeShowWeather) ?? true;
-    final showSafety = prefs.getBool(_keyHomeShowSafety) ?? true;
-    final showActivities = prefs.getBool(_keyHomeShowActivities) ?? true;
+    Map<String, bool> homeModules;
+    if (modulesString == null) {
+      // Standard: alles sichtbar
+      homeModules = AppSettings.initial().homeModules;
+    } else {
+      // Format: "key:true" / "key:false"
+      homeModules = {
+        for (final entry in modulesString)
+          if (entry.contains(':'))
+            entry.split(':')[0]: entry.split(':')[1] == 'true',
+      };
+    }
 
     return AppSettings(
       isDarkMode: isDarkMode,
-      textScaleFactor: textScaleFactor,
-      homeModules: HomeModulesVisibility(
-        showWeather: showWeather,
-        showSafety: showSafety,
-        showActivities: showActivities,
-      ),
+      textScaleFactor: textScale,
+      homeModules: homeModules,
     );
   }
 
   Future<void> saveAppSettings(AppSettings settings) async {
+    final prefs = await SharedPreferences.getInstance();
+
     await prefs.setBool(_keyDarkMode, settings.isDarkMode);
     await prefs.setDouble(_keyTextScale, settings.textScaleFactor);
 
-    await prefs.setBool(_keyHomeShowWeather, settings.homeModules.showWeather);
-    await prefs.setBool(_keyHomeShowSafety, settings.homeModules.showSafety);
-    await prefs.setBool(
-      _keyHomeShowActivities,
-      settings.homeModules.showActivities,
-    );
-  }
-}
+    final modulesString = settings.homeModules.entries
+        .map((e) => '${e.key}:${e.value}')
+        .toList();
 
-@riverpod
-Future<PreferencesService> preferencesService(Ref ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return PreferencesService(prefs);
+    await prefs.setStringList(_keyHomeModules, modulesString);
+  }
 }

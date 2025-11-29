@@ -1,19 +1,13 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../features/kids/stickers/sticker_models.dart';
-import '../../features/kids/stickers/stickers_repository.dart';
-
-part 'stickers_service.g.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StickersService {
-  const StickersService(this._repository);
+  StickersService();
 
-  final StickersRepository _repository;
-
-  Future<List<Sticker>> loadStickers() => _repository.loadStickers();
+  Future<List<String>> loadStickers() async {
+    return ["Sticker1", "Sticker2"];
+  }
 }
 
-@riverpod
-StickersService stickersService(Ref ref) {
-  return StickersService(const StickersRepository());
-}
+final stickersServiceProvider = Provider<StickersService>((ref) {
+  return StickersService();
+});

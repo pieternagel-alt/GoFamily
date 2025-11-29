@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class HomeNaroField extends StatelessWidget {
@@ -10,14 +9,12 @@ class HomeNaroField extends StatelessWidget {
       onTap: () {
         // TODO: Naro Screen öffnen
       },
-      child: Container,
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.12),
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.25),
-          ),
+          border: Border.all(color: Colors.white.withOpacity(0.25)),
         ),
         child: Row(
           children: [
@@ -29,10 +26,7 @@ class HomeNaroField extends StatelessWidget {
             const Expanded(
               child: Text(
                 "Frag Naro …",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
             const Icon(Icons.mic_none, color: Colors.white),

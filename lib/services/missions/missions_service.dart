@@ -1,18 +1,13 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../features/kids/missions/mission_models.dart';
-import '../../features/kids/missions/missions_repository.dart';
-
-part 'missions_service.g.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MissionsService {
-  const MissionsService(this._repository);
-  final MissionsRepository _repository;
+  MissionsService();
 
-  Future<List<Mission>> loadMissions() => _repository.loadMissions();
+  Future<List<String>> loadMissions() async {
+    return ["Mission A", "Mission B"];
+  }
 }
 
-@riverpod
-MissionsService missionsService(Ref ref) {
-  return MissionsService(const MissionsRepository());
-}
+final missionsServiceProvider = Provider<MissionsService>((ref) {
+  return MissionsService();
+});

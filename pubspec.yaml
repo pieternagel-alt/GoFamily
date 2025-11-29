@@ -1,51 +1,48 @@
 name: gofamily
-description: "A new Flutter project."
+description: "GoFamily App"
 publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.0
+  sdk: ^3.8.0
 
 dependencies:
   flutter:
     sdk: flutter
 
+  # UI
   cupertino_icons: ^1.0.8
-  shared_preferences: ^2.5.3
 
-  # ---- RIVERPOD ----
+  # STATE MANAGEMENT
   flutter_riverpod: ^3.0.3
   riverpod_annotation: ^3.0.3
 
-  # ---- WEATHER / API ----
-  http: ^1.1.0
+  # LOCAL STORAGE
+  shared_preferences: ^2.2.2
 
-  # ---- LOCATION (GPS) ----
+  # LOCATION
   geolocator: ^10.0.0
   geocoding: ^3.0.0
+
+  # NETWORK / WEATHER
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^3.0.0
 
-  # ---- ICONS ----
-  flutter_launcher_icons: ^0.13.1
-
-  # ---- CODE GENERATOR (RIVERPOD) ----
+  # CODE GENERATION
   build_runner: ^2.4.9
   riverpod_generator: ^3.0.3
+
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/logo/app_logo.png
-    - assets/icons/app_icon.png
-    - assets/images/backgrounds/
-
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icons/app_icon.png"
-  min_sdk_android: 21
+    - assets/logo/
+    - assets/icons/
+    - assets/images/

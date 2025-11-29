@@ -21,7 +21,7 @@ class HomeWeatherWidget extends ConsumerWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      error: (error, stack) => _glass(
+      error: (_, __) => _glass(
         const Text("Keine Wetterdaten", style: TextStyle(color: Colors.white)),
       ),
       data: (WeatherData weather) {
@@ -55,6 +55,7 @@ class HomeWeatherWidget extends ConsumerWidget {
         children: [
           _weatherIcon(weather.condition),
           const SizedBox(width: 16),
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,7 +69,9 @@ class HomeWeatherWidget extends ConsumerWidget {
               ),
             ],
           ),
+
           const Spacer(),
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -78,7 +81,7 @@ class HomeWeatherWidget extends ConsumerWidget {
               ),
               Text(
                 weather.isFromCache ? "Aus Cache" : "Live",
-                style: const TextStyle(color: Colors.white38, fontSize: 14),
+                style: const TextStyle(color: Colors.white38),
               ),
             ],
           ),

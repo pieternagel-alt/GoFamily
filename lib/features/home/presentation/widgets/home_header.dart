@@ -11,7 +11,7 @@ class HomeHeader extends StatelessWidget {
         Row(
           children: [
             Image.asset(
-              'assets/icons/app_logo_small.png', // passe den Namen ggf. an
+              'assets/icons/gofamily_logo_small.png', // ggf. anpassen
               height: 28,
             ),
             const SizedBox(width: 8),

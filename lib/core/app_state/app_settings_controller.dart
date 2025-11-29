@@ -1,48 +1,48 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gofamily/core/app_state/app_settings.dart';
+import 'package:gofamily/services/preferences/preferences_service.dart';
 
-import '../../services/preferences/preferences_service.dart';
-import 'app_settings.dart';
+/// Provider, der den Controller bereitstellt
+final appSettingsControllerProvider =
+    StateNotifierProvider<AppSettingsController, AppSettings>(
+      (ref) => AppSettingsController(PreferencesService()),
+    );
 
-part 'app_settings_controller.g.dart';
-
-@riverpod
-class AppSettingsController extends _$AppSettingsController {
-  @override
-  FutureOr<AppSettings> build() async {
-    final prefsService = await ref.watch(preferencesServiceProvider.future);
-    return prefsService.loadAppSettings();
+/// Steuert das Laden/Speichern der AppSettings
+/// und bietet Methoden für Settings-Screen etc.
+class AppSettingsController extends StateNotifier<AppSettings> {
+  AppSettingsController(this._preferences) : super(AppSettings.initial()) {
+    _load();
   }
 
+  final PreferencesService _preferences;
+
+  Future<void> _load() async {
+    final loaded = await _preferences.loadAppSettings();
+    state = loaded;
+  }
+
+  /// Dark Mode an/aus
   Future<void> toggleDarkMode() async {
-    final current = state.asData?.value ?? const AppSettings();
-    final updated = current.copyWith(isDarkMode: !current.isDarkMode);
-    await _persist(updated);
+    final updated = state.copyWith(isDarkMode: !state.isDarkMode);
+    state = updated;
+    await _preferences.saveAppSettings(updated);
   }
 
-  Future<void> setTextScaleFactor(double value) async {
-    final current = state.asData?.value ?? const AppSettings();
-    final updated = current.copyWith(textScaleFactor: value);
-    await _persist(updated);
+  /// Textgröße setzen
+  Future<void> setTextScaleFactor(double factor) async {
+    final updated = state.copyWith(textScaleFactor: factor);
+    state = updated;
+    await _preferences.saveAppSettings(updated);
   }
 
-  Future<void> setHomeModuleVisibility(HomeModule module, bool visible) async {
-    final current = state.asData?.value ?? const AppSettings();
-    final h = current.homeModules;
+  /// Sichtbarkeit eines Home-Moduls setzen
+  Future<void> setHomeModuleVisibility(String moduleKey, bool visible) async {
+    final updatedModules = Map<String, bool>.from(state.homeModules)
+      ..[moduleKey] = visible;
 
-    final updatedModules = switch (module) {
-      HomeModule.weather => h.copyWith(showWeather: visible),
-      HomeModule.safety => h.copyWith(showSafety: visible),
-      HomeModule.activities => h.copyWith(showActivities: visible),
-    };
-
-    final updated = current.copyWith(homeModules: updatedModules);
-
-    await _persist(updated);
-  }
-
-  Future<void> _persist(AppSettings updated) async {
-    state = AsyncValue.data(updated);
-    final prefsService = await ref.read(preferencesServiceProvider.future);
-    await prefsService.saveAppSettings(updated);
+    final updated = state.copyWith(homeModules: updatedModules);
+    state = updated;
+    await _preferences.saveAppSettings(updated);
   }
 }
